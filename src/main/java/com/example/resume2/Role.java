@@ -18,7 +18,7 @@ public class Role {
     public Role() {
     }
 
-    public Role(String role, Collection<User> users) {
+    public Role(String role) {
         this.role = role;
         this.users = users;
     }

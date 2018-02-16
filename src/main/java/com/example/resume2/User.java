@@ -7,6 +7,7 @@ import java.util.Collection;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
     @Column(name = "email",nullable = false)
     private String email;
@@ -20,6 +21,9 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
     @Column(name = "username")
     private String username;
 
@@ -31,12 +35,22 @@ public class User {
     public User() {
     }
 
-    public User(String password, String firstName, String lastName, String username, Collection<Role> roles) {
+    public User(String email, String password, String firstName, String lastName, boolean enabled, String username) {
+        this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.enabled = enabled;
         this.username = username;
         this.roles = roles;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -69,6 +83,14 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public String getUsername() {
