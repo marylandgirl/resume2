@@ -9,11 +9,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.security.Principal;
+
+import static org.codehaus.groovy.runtime.DefaultGroovyMethods.size;
 
 @Controller
 public class HomeController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    ResumeRepository resumeRepository;
 
     @RequestMapping("/")
     public String index(){
@@ -51,4 +57,26 @@ public class HomeController {
         return "index";
     }
 
+    @RequestMapping("/summary")
+    public String showSummary(Model model, Principal principal){
+        Resume resume;
+        int resumeCount = size(resumeRepository.findAll());
+        /*System.out.println("Kim the number of items in the repository is " + resumeCount);*/
+        if ( resumeCount > 0) {
+            resume = resumeRepository.findTopByOrderByIdDesc();
+        } else {
+            resume = new Resume();
+        }
+        model.addAttribute("resume",resume);
+        return "summary";
+    }
+
+    @RequestMapping("/processsummary")
+    public String showSummary(@Valid @ModelAttribute("resume") Resume resume,BindingResult result){
+        if (result.hasErrors()) {
+            return "summary";
+        }
+        resumeRepository.save(resume);
+        return "redirect:/";
+    }
 }
