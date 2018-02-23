@@ -38,6 +38,11 @@ public class HomeController {
         return "login";
     }
 
+    @PostMapping("/login")
+    public String processLogin(@Valid @ModelAttribute("user") User user, BindingResult result) {
+        return "login";
+    }
+
     @RequestMapping("/secure")
     public String admin(){
         return "secure";
@@ -65,20 +70,25 @@ public class HomeController {
     }
 
     @RequestMapping("/summary")
-    public String showSummary(Model model, Principal principal){
-        Resume resume;
+    public String showSummary(Model model, Authentication principal){
         User user = userRepository.findByUsername(principal.getName());
-        try {
-            if (resumeRepository.findByUser(user).equals(null)) {
-                resume = new Resume();
-            } else {
-                resume = resumeRepository.findByUser(user);
-            }
-        } catch (NullPointerException e) {
+        Resume resume = resumeRepository.findByUser(user);
+        if (resume==null) {
             resume = new Resume();
+            resume.setLastName(user.getLastName());
+            resume.setFirstName(user.getFirstName());
+            resume.setEmail(user.getEmail());
+            resume.setUser(user);
         }
 
+        System.out.println("Kim your in the catch block");
+
+        System.out.println("Kim the values in resume are " + '\n' + resume.getEmail() + '\n' + resume.getLastName() + '\n' + resume.getFirstName());
+        /*resumeRepository.save(resume);*/
+        System.out.println("Kim the values in resume are " + '\n' + resume.getId() + '\n' + resume.getEmail() + '\n' + resume.getLastName() + '\n' + resume.getFirstName());
         model.addAttribute("resume",resume);
+
+
         return "summary";
     }
 
@@ -89,7 +99,6 @@ public class HomeController {
             String str = resume.getSummary();
             return "index";
         }
-        System.out.println("Kim the id for this resume is "  + resume.getId());
 
         resumeRepository.save(resume);
         return "redirect:/";
