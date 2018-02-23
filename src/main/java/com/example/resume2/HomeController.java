@@ -40,7 +40,7 @@ public class HomeController {
 
     @PostMapping("/login")
     public String processLogin(@Valid @ModelAttribute("user") User user, BindingResult result) {
-        return "login";
+        return "index";
     }
 
     @RequestMapping("/secure")
@@ -80,27 +80,32 @@ public class HomeController {
             resume.setEmail(user.getEmail());
             resume.setUser(user);
         }
-
-        System.out.println("Kim your in the catch block");
-
-        System.out.println("Kim the values in resume are " + '\n' + resume.getEmail() + '\n' + resume.getLastName() + '\n' + resume.getFirstName());
-        /*resumeRepository.save(resume);*/
-        System.out.println("Kim the values in resume are " + '\n' + resume.getId() + '\n' + resume.getEmail() + '\n' + resume.getLastName() + '\n' + resume.getFirstName());
+        System.out.println("Kim you're in /summary requestmapping");
         model.addAttribute("resume",resume);
-
-
         return "summary";
     }
 
     @PostMapping("/processsummary")
     public String showSummary(@Valid @ModelAttribute("resume") Resume resume,BindingResult result){
         if (result.hasErrors()) {
-            System.out.println("Kim there were errors " + result.getAllErrors());
-            String str = resume.getSummary();
-            return "index";
+              return "index";
         }
-
+        System.out.println("Kim you're in /processsummary postmapping");
         resumeRepository.save(resume);
         return "redirect:/";
     }
+
+    @RequestMapping("/contactinfo")
+    public String contactInfo(Model model, Authentication principal){
+        User user = userRepository.findByUsername(principal.getName());
+        Resume resume = resumeRepository.findByUser(user);
+        if (resume==null) {
+            resume = new Resume();
+            resume.setSummary("Blank");
+        }
+        resume.setUser(user);
+        model.addAttribute("resume",resume);
+        return "contactinfo";
+    }
+
 }

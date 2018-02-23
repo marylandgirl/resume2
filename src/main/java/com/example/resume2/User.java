@@ -32,7 +32,7 @@ public class User {
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
-    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
+    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     private Resume resume;
 
     public User() {
