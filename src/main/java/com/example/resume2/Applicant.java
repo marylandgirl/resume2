@@ -4,11 +4,14 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "resume")
-public class Resume {
+public class Applicant {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @NotNull
+    private String summary;
 
     @NotNull
     @Column(name = "last_name")
@@ -22,14 +25,20 @@ public class Resume {
     @Column(name = "email")
     private String email;
 
+
     private String image;
 
-    @NotNull
-    private String summary;
+    public Applicant() {
+        image = "/home/student/Ideaprojects/resume2/src/main/resources/templates/images/kjohnson.jpg";
+    }
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resume_id", nullable = false)
-    private User user;
+    public Applicant(String summary, String lastName, String firstName, String email, String image) {
+        this.summary = summary;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.email = email;
+        this.image = image;
+    }
 
     public long getId() {
         return id;
@@ -37,6 +46,14 @@ public class Resume {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 
     public String getLastName() {
@@ -69,21 +86,5 @@ public class Resume {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

@@ -9,4 +9,6 @@ public interface ResumeRepository extends CrudRepository<Resume,Long> {
 
     @Override
     Iterable<Resume> findAll();
+
+    Resume findByUser(User user);
 }

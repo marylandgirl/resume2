@@ -32,6 +32,9 @@ public class User {
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
+    @OneToOne(mappedBy = "user",fetch = FetchType.LAZY, cascade =  CascadeType.ALL)
+    private Resume resume;
+
     public User() {
     }
 
@@ -107,5 +110,13 @@ public class User {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }
+
+    public Resume getResume() {
+        return resume;
+    }
+
+    public void setResume(Resume resume) {
+        this.resume = resume;
     }
 }
